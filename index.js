@@ -1,4 +1,8 @@
-const midi = require('midi')
+// npm packages
+import { default as midi } from 'midi'
+
+// Custom modules
+import FCB1010 from './modules/fcb1010/index.js'
 
 // Set up a new MIDI input & output
 const input = new midi.Input()
