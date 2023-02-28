@@ -110,19 +110,12 @@ for(let i = 0; i < 10; i++) {
   output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 106, i])
 }
 
-// Update the FCB1010 7-segment display to read 'EF'
-/*
-output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 109, 4])
-output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 110, 5])
-*/
-
 // Update the FCB1010 7-segment display to read 'HX'
 updateFCB1010Display("L6")
 
 // Press FS1 and FS2 on the Helix Stomp XL
 output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + HX_STOMP_XL_MIDI_CHANNEL, 49, 0])
 output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + HX_STOMP_XL_MIDI_CHANNEL, 50, 0])
-
 
 // Close the port when done.
 setTimeout(function() {
