@@ -1,5 +1,9 @@
 const midi = require('midi')
 
+// Set up a new MIDI input & output
+const input = new midi.Input()
+const output = new midi.Output()
+
 // Helper to find an input port with a specified name
 function getIndexContainingName(list, name) {
   return list.findIndex(element => element.includes(name))
@@ -14,10 +18,6 @@ function constructPortNameList(inOrOut) {
   }
   return portNameList
 }
-
-// Set up a new MIDI input & output
-const input = new midi.Input()
-const output = new midi.Output()
 
 function initializeMidi(inputNameIncludes, outputNameIncludes) {
   // Compile and a list of available input port names
@@ -70,26 +70,28 @@ const ONES_PLACE_DEFAULT = 15
 const LETTERS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',' ']
 const HEX = ['0','1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F',' ']
 
-function updateFCB1010Display(chars) {
-  if (!chars || chars.length !== 2)
+function updateFCB1010Display(displayString = "  ") {
+  if (!displayString || displayString.length !== 2)
     return
 
+  let tensPlaceCharacter = displayString.charAt(0)
   let tensPlaceMessageCode = TENS_PLACE_AZ_MESSAGE_CODE
-  let tensPlaceIndex = LETTERS.indexOf(chars[0])
+  let tensPlaceIndex = LETTERS.indexOf(tensPlaceCharacter)
   if(tensPlaceIndex < 0) {
     tensPlaceMessageCode = TENS_PLACE_HEX_MESSAGE_CODE
-    tensPlaceIndex = HEX.indexOf(chars[0])
+    tensPlaceIndex = HEX.indexOf(tensPlaceCharacter)
     tensPlaceIndex = tensPlaceIndex < 0 ? TENS_PLACE_DEFAULT : tensPlaceIndex
   }
   let tensPlaceMessage = [CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, tensPlaceMessageCode, tensPlaceIndex]
   console.log(tensPlaceMessage)
   output.sendMessage(tensPlaceMessage)
 
+  let onesPlaceCharacter = displayString.charAt(1)
   let onesPlaceMessageCode = ONES_PLACE_AZ_MESSAGE_CODE
-  let onesPlaceIndex = LETTERS.indexOf(chars[1])
+  let onesPlaceIndex = LETTERS.indexOf(onesPlaceCharacter)
   if(onesPlaceIndex < 0) {
     onesPlaceMessageCode = ONES_PLACE_HEX_MESSAGE_CODE
-    onesPlaceIndex = HEX.indexOf(chars[1])
+    onesPlaceIndex = HEX.indexOf(onesPlaceCharacter)
     onesPlaceIndex = onesPlaceIndex < 0 ? ONES_PLACE_DEFAULT : onesPlaceIndex
   }
   let onesPlaceMessage = [CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, onesPlaceMessageCode, onesPlaceIndex]
@@ -115,7 +117,7 @@ output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 110, 5])
 */
 
 // Update the FCB1010 7-segment display to read 'HX'
-updateFCB1010Display(['L', '6'])
+updateFCB1010Display("L6")
 
 // Press FS1 and FS2 on the Helix Stomp XL
 output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + HX_STOMP_XL_MIDI_CHANNEL, 49, 0])
@@ -129,9 +131,8 @@ setTimeout(function() {
     output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 107, i])
   }
 
-  // Turn off the FCB1010 7-segment display
-  output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 109, 26])
-  output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + FCB1010_MIDI_CHANNEL, 110, 26])
+  // Clear the FCB1010 7-segment display
+  updateFCB1010Display()
 
   // Press FS3 on the Helix Stomp XL
   output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + HX_STOMP_XL_MIDI_CHANNEL, 51, 0])
