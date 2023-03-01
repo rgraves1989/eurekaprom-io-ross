@@ -1,0 +1,5 @@
+const CONTROL_CHANGE_MESSAGE_CODE = 176
+
+export default {
+	CONTROL_CHANGE_MESSAGE_CODE,
+}
