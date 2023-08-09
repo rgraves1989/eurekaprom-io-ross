@@ -21,7 +21,7 @@ export default class MidiController {
 	}
 
 	initialize(inputNameIncludes, outputNameIncludes) {
-		// Compile and a list of available input port names
+	  // Compile and a list of available input port names
 	  const INPUT_PORT_NAMES = MidiController.constructPortNameList(this.input)
 	  console.log('Found the following MIDI input ports:')
 	  console.table(INPUT_PORT_NAMES)
@@ -36,8 +36,9 @@ export default class MidiController {
   	const DESIRED_OUTPUT_PORT = MidiController.getIndexContainingName(OUTPUT_PORT_NAMES, outputNameIncludes)
 
   	// If we can't find the desired input or output port, abort
-  	if(!DESIRED_INPUT_PORT || !DESIRED_OUTPUT_PORT)
-    	return
+    if (DESIRED_INPUT_PORT < 0 || DESIRED_OUTPUT_PORT < 0) {
+      return
+    }
 
     // Open the input and output ports
 	  this.input.openPort(DESIRED_INPUT_PORT)
