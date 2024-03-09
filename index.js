@@ -5,12 +5,11 @@ import FCB1010 from './modules/fcb1010/index.js'
 
 const focusriteController = new MidiController("Focusrite", "Focusrite")
 const hxStompXLController = new MidiController("HX Stomp", "HX Stomp")
-const fcb1010 = new FCB1010("LINE6")
-const hxStompXL = new MidiDevice("HX Stomp XL", 2)
+const fcb1010 = new FCB1010("FF")
+const hxStompXL = new MidiDevice("HX Stomp XL", 1)
 
 // Register the Focusrite devices
 focusriteController.registerDevice(fcb1010)
-//focusriteController.registerDevice(hxStompXL)
 
 // Register the HX Stomp devices
 hxStompXLController.registerDevice(hxStompXL)
@@ -25,10 +24,9 @@ for(let i = 1; i <= 10; i++) {
 }
 
 // Update the FCB1010 7-segment display to read 'HX'
-fcb1010.updateDisplay("LINE6")
+fcb1010.updateDisplay("EF")
 
 // Close the port when done.
-/*
 setTimeout(function() {
   // Turn off pedals 1-10 LEDs on the FCB1010
   for(let i = 10; i >= 1; i--) {
@@ -39,7 +37,7 @@ setTimeout(function() {
   fcb1010.updateDisplay()
 
   // Press FS3 on the Helix Stomp XL
-  hxStompXLController.output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + HX_STOMP_XL_MIDI_CHANNEL, 51, 0])
+  focusriteController.output.sendMessage([CONTROL_CHANGE_MESSAGE_CODE + HX_STOMP_XL_MIDI_CHANNEL, 51, 0])
 
   focusriteController.input.closePort()
   focusriteController.output.closePort()
@@ -47,4 +45,3 @@ setTimeout(function() {
   hxStompXLController.input.closePort()
   hxStompXLController.output.closePort()
 }, 5000)
-*/
